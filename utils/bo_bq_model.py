@@ -18,7 +18,7 @@ class Emukit_BO_BQ_GP_Model(IModel):
   """
       This is a Gaussian Process Model that can be used by Emukit for Bayesian optimization or Bayesian quadrature
   """
-  def __init__(self, X, Y, config, ai_model=None):
+  def __init__(self, X, Y, config, device, ai_model=None):
     self.time_count = 0
     self.data_dim = config.data_dim
     self.npr = np.random.RandomState(123)
@@ -33,7 +33,7 @@ class Emukit_BO_BQ_GP_Model(IModel):
     self.kernel = None
     self.noise_level = config.epsilon
     self.sm_params = edict()
-    self.device = torch.device('cpu')
+    self.device = device
     self.X_test_torch = None
     self.X_train_torch = torch.from_numpy(X).float().to(self.device)
     self.Y_train_torch = torch.from_numpy(Y).float().to(self.device)

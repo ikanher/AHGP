@@ -26,7 +26,7 @@ torch.set_printoptions(profile='full')
 torch.set_printoptions(precision=4,linewidth=200)
 np.set_printoptions(precision=4,linewidth=150)
 
-def bo_loop(config, image_path, ai_model=None):
+def bo_loop(config, image_path, device, ai_model=None):
   target_function, space = eval(config.name)()
   data_dim = config.data_dim
   num_mix = config.num_mix
@@ -74,7 +74,7 @@ def bo_loop(config, image_path, ai_model=None):
       model_emukit.optimize()
     else:
       #Set up Emukit_BO_BQ_GP_Model
-      model_emukit = Emukit_BO_BQ_GP_Model(X_init_norm, Y_init_norm, config, ai_model)
+      model_emukit = Emukit_BO_BQ_GP_Model(X_init_norm, Y_init_norm, config, device, ai_model)
       model_emukit.optimize()
       model_emukit.set_kernel()
 
@@ -150,7 +150,7 @@ def main():
     else:
       image_path =os.path.join(config.save_dir, config.bo.name + 'iter' +str(config.bo.opt_iter) + 'lr' + str(config.bo.opt_lr) +'opt.pdf')
   # Run the experiment
-  results_list = bo_loop(config.bo, image_path, model)
+  results_list = bo_loop(config.bo, image_path, device, model)
   if config.bo.is_GPY:
     if config.bo.is_sparseGP:
       pickle.dump(results_list,
