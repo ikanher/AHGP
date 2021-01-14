@@ -743,6 +743,7 @@ class GpSM2AttRunner(object):
 
 
     if self.config.test.is_save:
+      os.makedirs(self.config.test.save_dir, exist_ok=True)
       if self.config.test.opt_is_lbfgs:
         pickle.dump(result_dic,
                     open(os.path.join(self.config.test.save_dir, self.config.test.file_name + str(self.config.test.num_data) + str(self.config.test.add_noise) +'_lbfgs_results.p'), 'wb'))
